@@ -57,5 +57,4 @@ static void WorkWithDirectories()
    WriteLine("Deleting it...");
    Delete(newFolder,recursive: true);
    WriteLine($"Does it exist? {Exists(newFolder)}");
-
 }
