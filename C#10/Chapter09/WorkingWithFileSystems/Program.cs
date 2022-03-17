@@ -100,6 +100,14 @@ static void WorkWithFiles()
    WriteLine("File Name without Extension: {0}", GetFileNameWithoutExtension(textFile));
    WriteLine($"Random File Name: {GetRandomFileName()}");
    WriteLine($"Temporary File Name: {GetTempFileName()}");
+
+   // FileInfo instance for efficiently performing multiple actions on a file
+   FileInfo info = new(backupFile);
+   WriteLine($"{backupFile}:");
+   WriteLine($"Contains {info.Length} bytes");
+   WriteLine($"Last accessed {info.LastAccessTime}");
+   WriteLine($"Has readonly set to {info.IsReadOnly}");
+
    
 
 
