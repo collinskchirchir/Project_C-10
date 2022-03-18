@@ -75,7 +75,7 @@ static void WorkWithFiles()
    // check if a file exists
    WriteLine($"Does it exist? {File.Exists(textFile)}");
 
-   //create a new text file and add a line to it
+   // Create a new text file and add a line to it
    StreamWriter textWriter = File.CreateText(textFile);
    textWriter.WriteLine("Hello, C#10!");
    textWriter.Close();  // close file and release resources
@@ -87,12 +87,14 @@ static void WorkWithFiles()
    Write("Confirm the files exist, then press ENTER: ");
    ReadLine();
 
-   // delete file
+   // Delete file
    File.Delete(textFile);
    WriteLine($"Does it exist? {File.Exists(textFile)}");
 
-   // read from the text file backup
+   // Read from the text file backup
    WriteLine($"Reading contents of {backupFile}: ");
+   StreamReader textReader = File.OpenText(backupFile);
+   WriteLine(textReader.ReadToEnd());
    
    // Managing Paths
    WriteLine($"Folder Name: {GetDirectoryName(textFile)}");
@@ -107,8 +109,4 @@ static void WorkWithFiles()
    WriteLine($"Contains {info.Length} bytes");
    WriteLine($"Last accessed {info.LastAccessTime}");
    WriteLine($"Has readonly set to {info.IsReadOnly}");
-
-   
-
-
 }
