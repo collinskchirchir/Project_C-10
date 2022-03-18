@@ -110,3 +110,7 @@ static void WorkWithFiles()
    WriteLine($"Last accessed {info.LastAccessTime}");
    WriteLine($"Has readonly set to {info.IsReadOnly}");
 }
+static void WorkingWithPaths()
+{
+   WriteLine("Hello Asswipe! Ha!")
+}
