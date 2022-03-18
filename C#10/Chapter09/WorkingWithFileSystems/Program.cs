@@ -95,6 +95,7 @@ static void WorkWithFiles()
    WriteLine($"Reading contents of {backupFile}: ");
    StreamReader textReader = File.OpenText(backupFile);
    WriteLine(textReader.ReadToEnd());
+   textReader.Close();
    
    // Managing Paths
    WriteLine($"Folder Name: {GetDirectoryName(textFile)}");
@@ -103,14 +104,10 @@ static void WorkWithFiles()
    WriteLine($"Random File Name: {GetRandomFileName()}");
    WriteLine($"Temporary File Name: {GetTempFileName()}");
 
-   // FileInfo instance for efficiently performing multiple actions on a file
+   // Getting File Information Using FileInfo
    FileInfo info = new(backupFile);
    WriteLine($"{backupFile}:");
    WriteLine($"Contains {info.Length} bytes");
    WriteLine($"Last accessed {info.LastAccessTime}");
    WriteLine($"Has readonly set to {info.IsReadOnly}");
-}
-static void WorkingWithPaths()
-{
-   WriteLine("Hello Asswipe! Ha!")
 }
