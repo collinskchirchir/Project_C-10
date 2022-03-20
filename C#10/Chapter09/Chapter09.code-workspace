@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "WorkingWithDirectories"
+		},
+		{
+			"path": "WorkWithStreams"
 		}
 	],
 	"settings": {}
