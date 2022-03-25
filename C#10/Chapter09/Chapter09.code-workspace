@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "WorkWithStreams"
+		},
+		{
+			"path": "WorkingWithEncodings"
 		}
 	],
 	"settings": {}
