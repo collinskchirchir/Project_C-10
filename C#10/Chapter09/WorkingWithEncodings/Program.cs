@@ -25,7 +25,7 @@ Encoding encoder = number switch
 };
 
 // define a string to encode
-string message = "Cafe cost: $4.39";
+string message = "Café cost: £4.39";
 
 // encode the string into a byte array
 byte[] encoded = encoder.GetBytes(message);
