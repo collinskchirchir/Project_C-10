@@ -65,3 +65,19 @@ using (FileStream xmlLoad = File.Open(path, FileMode.Open))
       }
    }
 }
+// SERIALIZING WITH JSON
+// Create a file to write to
+string jsonPath = Combine(CurrentDirectory, "people.json");
+using (StreamWriter jsonStream = File.CreateText(jsonPath))
+{
+   // create an object that will format as JSON
+   Newtonsoft.Json.JsonSerializer jss = new();
+
+   // serialize the object graph into a string
+   jss.Serialize(jsonStream, people);
+}
+ WriteLine();
+ WriteLine("Written {0:N0} bytes of  JSON to: {1}", new FileInfo(jsonPath).Length, jsonPath);
+
+ // display the serialized object graph
+ WriteLine(File.ReadAllText(jsonPath));
