@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization; // XmlSerializer
 using Packt.Shared; // Person
+using NewJson = System.Text.Json.JsonSerializer;
 using static System.Console;
 using static System.Environment;
 using static System.IO.Path;
@@ -81,3 +82,19 @@ using (StreamWriter jsonStream = File.CreateText(jsonPath))
 
  // display the serialized object graph
  WriteLine(File.ReadAllText(jsonPath));
+
+ // Deserializing JSON using new APIs
+ using (FileStream jsonLoad = File.Open(jsonPath, FileMode.Open))
+ {
+    // deserialize object graph into a List of Person
+    List<Person> loadedPeople = await NewJson.DeserializeAsync(utf8Json: jsonLoad, returnType: typeof(List<Person>)) as List<Person>;
+    if (loadedPeople is not null)
+    {
+       foreach (Person p in loadedPeople)
+       {
+          WriteLine("{0} has {1} children.", p.LastName, p.Children?.Count >> 0);
+       }
+    }
+
+
+ }
