@@ -28,14 +28,14 @@ public class Northwind : DbContext
    protected override void OnModelCreating(ModelBuilder modelBuilder)
    {
       // example of using Fluent API instead of attributes to limit the length of category name to 15
-      modelBuilder.Entity<Category>
+      modelBuilder.Entity<Category>()
          .Property(category => category.CategoryName)
          .IsRequired() // NOT NULL
          .HasMaxLength(15);
       if (ProjectConstants.DatabaseProvider == "SQLite")
       {
          // added to "fix" the lack of decimal support in SQLite
-         modelBuilder.Entity<Product>
+         modelBuilder.Entity<Product>()
             .Property(product => product.Cost)
             .HasConversion<double>();
       }
