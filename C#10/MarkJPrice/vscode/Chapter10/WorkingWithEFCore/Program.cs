@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore; // Include extension method
 
 WriteLine($"Using {ProjectConstants.DatabaseProvider} database provider.");
 // QueryingCategories();
-// FilteredIncludes();
-QueryingProducts();
+FilteredIncludes();
+// QueryingProducts();
 
 static void QueryingCategories()
 {
@@ -46,6 +46,9 @@ static void FilteredIncludes()
          WriteLine("No categories found.");
          return;
       }
+
+      // enumerate the query and output the generated SQL
+      WriteLine($"ToQueryString: {categories.ToQueryString()}");
 
       foreach (Category c in categories)
       {
