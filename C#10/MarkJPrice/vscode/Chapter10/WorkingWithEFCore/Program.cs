@@ -85,6 +85,7 @@ static void QueryingProducts()
       while(!decimal.TryParse(input, out price));
 
       IQueryable<Product>? products = db.Products?
+         .TagWith("Products filtered by price and sorted.")
          .Where(product => product.Cost > price)
          .OrderByDescending(product => product.Cost);
       if(products is null)
