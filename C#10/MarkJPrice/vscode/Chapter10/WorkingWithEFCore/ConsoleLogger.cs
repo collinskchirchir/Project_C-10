@@ -42,7 +42,7 @@ public class ConsoleLogger: ILogger
    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception, string> formatter)
    {
       // log the level and event identifier
-      Write($"Level: {logLevel}, EventId: {eventId}");
+      Write($"Level: {logLevel}, EventId: {eventId.Id}");
 
       // only output the state or exception if it exists
       if(state != null)
