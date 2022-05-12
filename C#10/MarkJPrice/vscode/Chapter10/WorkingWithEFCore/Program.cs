@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore; // Include extension method
 
 
 WriteLine($"Using {ProjectConstants.DatabaseProvider} database provider.");
-// QueryingCategories();
+QueryingCategories();
 // FilteredIncludes();
 // QueryingProducts();
-QueryingWithLike();
+// QueryingWithLike();
 
 static void QueryingCategories()
 {
@@ -22,8 +22,8 @@ static void QueryingCategories()
       WriteLine("Categories and how many products they have:");
       
       // a query to get all categories and their related products
-      IQueryable<Category>? categories = db.Categories?
-         .Include(c => c.Products);
+      IQueryable<Category>? categories = db.Categories;
+         // .Include(c => c.Products);
       if(categories is null)
       {
          WriteLine("No categories found.");
