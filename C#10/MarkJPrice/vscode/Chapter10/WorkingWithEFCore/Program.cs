@@ -9,10 +9,16 @@ using Microsoft.EntityFrameworkCore.ChangeTracking; // CollectionEntry
 
 
 WriteLine($"Using {ProjectConstants.DatabaseProvider} database provider.");
-QueryingCategories();
+// QueryingCategories();
 // FilteredIncludes();
 // QueryingProducts();
 // QueryingWithLike();
+
+if (AddProduct(categoryId: 6, productName: "Bob's Burgers", price: 500M))
+{
+   WriteLine("Add product successfully.");
+}
+ListProducts();
 
 static void QueryingCategories()
 {
@@ -156,6 +162,39 @@ static void QueryingWithLike()
       {
          WriteLine("{0} has {1} units in stock. Discontinued? {2}", 
             p.ProductName, p.Stock, p.Discontinued);
+      }
+   }
+}
+static bool AddProduct(int categoryId, string productName, decimal? price)
+{
+   using(Northwind db = new())
+   {
+      Product p = new()
+      {
+         CategoryId = categoryId,
+         ProductName = productName,
+         Cost = price
+      };
+
+      // mark product as added in change tracking
+      db.Products.Add(p);
+
+      // save tracked changes to database
+      int affected = db.SaveChanges();
+      return (affected == 1);
+   }
+}
+static void ListProducts()
+{
+   using (Northwind db = new())
+   {
+      WriteLine("{0,-3} {1,-35} {2,8} {3,5} {4}",
+         "Id", "Product Name", "Cost", "Stock", "Disc.");
+      foreach (Product p in db.Products
+         .OrderByDescending(product => product.Cost))
+      {
+         WriteLine("{0:000} {1,-35} {2,8:$#,##0.00} {3,5} {4}",
+            p.ProductId, p.ProductName, p.Cost, p.Stock, p.Discontinued );
       }
    }
 }
