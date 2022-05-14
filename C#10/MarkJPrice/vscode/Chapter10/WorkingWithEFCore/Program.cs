@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Packt.Shared;
 using static System.Console;
 using Microsoft.EntityFrameworkCore; // Include extension method
+using Microsoft.EntityFrameworkCore.ChangeTracking; // CollectionEntry
 
 
 
@@ -22,8 +23,27 @@ static void QueryingCategories()
       WriteLine("Categories and how many products they have:");
       
       // a query to get all categories and their related products
-      IQueryable<Category>? categories = db.Categories;
+      IQueryable<Category>? categories;
+         // = db.Categories;
          // .Include(c => c.Products);
+      db.ChangeTracker.LazyLoadingEnabled = false;
+
+      Write("Enable eager loading? (Y/N): ");
+      bool eagerloading = (ReadKey().Key == ConsoleKey.Y);
+      bool explicitloading = false;
+      WriteLine();
+      if (eagerloading)
+      {
+         categories = db.Categories?
+            .Include(c => c.Products);
+      }
+      else
+      {
+         categories = db.Categories;
+         WriteLine("Enable explicit loading? (Y/N): ");
+         explicitloading = (ReadKey().Key == ConsoleKey.Y);
+         WriteLine();
+      }
       if(categories is null)
       {
          WriteLine("No categories found.");
@@ -32,6 +52,18 @@ static void QueryingCategories()
       // execute query and enumerate results
       foreach(Category c in categories)
       {
+         if (explicitloading)
+         {
+            Write($"Explicitly load products for {c.CategoryName}? (Y/N): ");
+            ConsoleKeyInfo key = ReadKey();
+            WriteLine();
+            if (key.Key == ConsoleKey.Y)
+            {
+               CollectionEntry<Category, Product> products =
+                  db.Entry(c).Collection(c2 => c2.Products);
+               if (!products.IsLoaded) products.Load();
+            }
+         }
          WriteLine($"{c.CategoryName} has {c.Products.Count} products.");
       }
    }
