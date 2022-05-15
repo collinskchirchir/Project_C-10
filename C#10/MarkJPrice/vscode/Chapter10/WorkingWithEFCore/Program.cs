@@ -18,11 +18,14 @@ if (AddProduct(categoryId: 6, productName: "Bob's Burgers", price: 500M))
 {
    WriteLine("Add product successfully.");
 }
-*/
+
 if (IncreaseProductPrice(productNameStartsWith: "Bob", amount: 20M))
 {
    WriteLine("Update product price successful.");
 }
+*/ 
+int deleted = DeleteProducts(productNameStartsWith: "Bob");
+WriteLine($"{deleted} product(s) were deleted");
 ListProducts();
 
 static void QueryingCategories()
@@ -216,5 +219,25 @@ static bool IncreaseProductPrice(string productNameStartsWith, decimal amount)
       int affected = db.SaveChanges();
       return (affected == 1);
       
+   }
+}
+static int DeleteProducts(string productNameStartsWith)
+{
+   using (Northwind db = new())
+   {
+      IQueryable<Product>? products = db.Products?
+         .Where(p => p.ProductName.StartsWith(productNameStartsWith));
+
+      if (products is null)
+      {
+         WriteLine("No products found to delete.");
+         return 0;
+      }
+      else
+      {
+         db.Products.RemoveRange(products);
+      }
+      int affected = db.SaveChanges();
+      return affected;
    }
 }
