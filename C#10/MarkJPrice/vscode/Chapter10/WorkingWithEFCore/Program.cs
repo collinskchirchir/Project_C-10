@@ -5,6 +5,7 @@ using Packt.Shared;
 using static System.Console;
 using Microsoft.EntityFrameworkCore; // Include extension method
 using Microsoft.EntityFrameworkCore.ChangeTracking; // CollectionEntry
+using Microsoft.EntityFrameworkCore.Storage; // IDbContextTransaction
 
 
 
@@ -225,19 +226,25 @@ static int DeleteProducts(string productNameStartsWith)
 {
    using (Northwind db = new())
    {
-      IQueryable<Product>? products = db.Products?
-         .Where(p => p.ProductName.StartsWith(productNameStartsWith));
+      using (IDbContextTransaction t = db.Database.BeginTransaction())
+      {
+         WriteLine("Transaction Isolation level: {0}",
+            t.GetDbTransaction().IsolationLevel);
+         IQueryable<Product>? products = db.Products?
+            .Where(p => p.ProductName.StartsWith(productNameStartsWith));
 
-      if (products is null)
-      {
-         WriteLine("No products found to delete.");
-         return 0;
+         if (products is null)
+         {
+            WriteLine("No products found to delete.");
+            return 0;
+         }
+         else
+         {
+            db.Products.RemoveRange(products);
+         }
+         int affected = db.SaveChanges();
+         t.Commit();
+         return affected;
       }
-      else
-      {
-         db.Products.RemoveRange(products);
-      }
-      int affected = db.SaveChanges();
-      return affected;
    }
 }
