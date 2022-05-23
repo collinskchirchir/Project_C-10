@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "WorkingWithEFCore"
+		},
+		{
+			"path": "CoursesAndStudents"
 		}
 	],
 	"settings": {}
