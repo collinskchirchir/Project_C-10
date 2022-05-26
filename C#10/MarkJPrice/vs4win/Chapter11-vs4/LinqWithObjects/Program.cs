@@ -28,3 +28,14 @@ foreach (string name in query1)
 }
 
 WriteLine("Writing Queries");
+var query = names.Where(name => name.Length > 4);
+
+foreach (string item in query)
+{
+    WriteLine(item);
+}
+
+static bool NameLongerThanFour(string name)
+{
+    return name.Length > 4;
+}
