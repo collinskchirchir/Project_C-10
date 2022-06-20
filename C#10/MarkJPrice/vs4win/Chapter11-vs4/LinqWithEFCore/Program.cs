@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore; //DbSet<T>
 using static System.Console;
 
-FilterAndSort();
+// FilterAndSort();
+JoinCategoriesAndProducts();
 
 static void FilterAndSort()
 {
@@ -30,5 +31,28 @@ static void FilterAndSort()
                 p.ProductId, p.ProductName, p.UnitPrice);
         }
         WriteLine();
+    }
+}
+
+static void JoinCategoriesAndProducts()
+{
+    using (Northwind db = new())
+    {
+        // Join every product to its category to return 77 matches
+        var queryJoin = db.Categories.Join(
+            inner: db.Products,
+            outerKeySelector: category => category.CategoryId,
+            innerKeySelector: product => product.CategoryId,
+            resultSelector: (c, p) =>
+                new { c.CategoryName, p.ProductName, p.ProductId })
+            .OrderBy(cp => cp.CategoryName);
+
+        foreach (var item in queryJoin)
+        {
+            WriteLine("{0}: {1} is in {2}.",
+                item.ProductId,
+                item.ProductName,
+                item.CategoryName);
+        }
     }
 }
