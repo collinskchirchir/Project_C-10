@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore; //DbSet<T>
 using static System.Console;
 
 // FilterAndSort();
-JoinCategoriesAndProducts();
-
+// JoinCategoriesAndProducts();
+GroupJoinCategoriesAndProducts();
 static void FilterAndSort()
 {
     using (Northwind db = new())
@@ -53,6 +53,32 @@ static void JoinCategoriesAndProducts()
                 item.ProductId,
                 item.ProductName,
                 item.CategoryName);
+        }
+    }
+}
+static void GroupJoinCategoriesAndProducts()
+{
+    using (Northwind db = new())
+    {
+        // group all products by their category to return 8 matches
+        var queryGroup = db.Categories.AsEnumerable().GroupJoin(
+            inner: db.Products,
+            outerKeySelector: category => category.CategoryId,
+            innerKeySelector: product => product.CategoryId,
+            resultSelector: (c, matchingProducts) => new
+            {
+                c.CategoryName,
+                Products = matchingProducts.OrderBy(p => p.ProductName)
+            });
+    foreach (var category in queryGroup)
+        {
+            WriteLine("{0} has {1} products.",
+                category.CategoryName,
+                category.Products.Count());
+            foreach (var product in category.Products)
+            {
+                WriteLine($"    {product.ProductName}");
+            }
         }
     }
 }
