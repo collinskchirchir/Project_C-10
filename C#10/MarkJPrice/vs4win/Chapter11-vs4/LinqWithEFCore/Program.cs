@@ -4,7 +4,8 @@ using static System.Console;
 
 // FilterAndSort();
 // JoinCategoriesAndProducts();
-GroupJoinCategoriesAndProducts();
+// GroupJoinCategoriesAndProducts();
+AggregateProducts();
 static void FilterAndSort()
 {
     using (Northwind db = new())
@@ -80,5 +81,23 @@ static void GroupJoinCategoriesAndProducts()
                 WriteLine($"    {product.ProductName}");
             }
         }
+    }
+}
+static void AggregateProducts()
+{
+    using (Northwind db = new())
+    {
+        WriteLine("{0,-25} {1,10}",
+            "Product count:", db.Products.Count());
+        WriteLine("{0,-25} {1,10:$#,##0.00}",
+            "Highest Product price:", db.Products.Max(p => p.UnitPrice));
+        WriteLine("{0,-25} {1,10:N0}",
+            "Sum of Units in stock:", db.Products.Sum(p => p.UnitsInStock));
+        WriteLine("{0,-25} {1,10:N0}",
+            "Sum of units on order:", db.Products.Sum(p => p.UnitsOnOrder));
+        WriteLine("{0,-25} {1,10:$#,##0.00}",
+            "Average unit price:", db.Products.Average(p => p.UnitPrice));
+        WriteLine("{0,-25} {1,10:$#,##0.00}",
+            "Value of units in stock:", db.Products.Sum(p => p.UnitPrice * p.UnitsInStock));
     }
 }
