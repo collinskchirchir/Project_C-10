@@ -2,18 +2,27 @@
 using Microsoft.EntityFrameworkCore; //DbSet<T>
 using static System.Console;
 
-// FilterAndSort();
+FilterAndSort();
 // JoinCategoriesAndProducts();
 // GroupJoinCategoriesAndProducts();
-AggregateProducts();
+// AggregateProducts();
 static void FilterAndSort()
 {
     using (Northwind db = new())
     {
-        DbSet<Product> allProducts = db.Products;
-        IQueryable<Product> filteredProducts =
-            allProducts.Where(product => product.UnitPrice < 10M);
+        DbSet<Product>? allProducts = db.Products;
+        if (allProducts is null)
+        {
+            WriteLine("No products found.");
+            return;
+        }
 
+        IQueryable<Product> processedProducts = allProducts
+          .ProcessSequence();
+
+        IQueryable<Product> filteredProducts = processedProducts
+          .Where(product => product.UnitPrice < 10M);
+              
         IOrderedQueryable<Product> sortedAndFilteredProducts = 
             filteredProducts.OrderByDescending(product => product.UnitPrice);
 
