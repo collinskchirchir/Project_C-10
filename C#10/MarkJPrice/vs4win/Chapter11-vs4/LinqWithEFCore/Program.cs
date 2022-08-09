@@ -1,12 +1,16 @@
 ﻿using Packt.Shared; // Northwind, Category, Product
 using Microsoft.EntityFrameworkCore; //DbSet<T>
+using System.Xml.Linq;
+
 using static System.Console;
 
 // FilterAndSort();
 // JoinCategoriesAndProducts();
 // GroupJoinCategoriesAndProducts();
 // AggregateProducts();
-CustomExtensionMethods();
+// CustomExtensionMethods();
+OutputProductsAsXml();
+
 static void FilterAndSort()
 {
     using (Northwind db = new())
@@ -129,5 +133,21 @@ static void CustomExtensionMethods()
         WriteLine("Mode unit price: {0:$#,##0.00}",
             db.Products.Mode(p => p.UnitPrice));
 
+    }
+}
+
+static void OutputProductsAsXml()
+{
+    using(Northwind db = new())
+    {
+        Product[] productsArray = db.Products.ToArray();
+        XElement xml = new("products",
+            from p in productsArray
+            select new XElement("product",
+                new XAttribute("Id", p.ProductId),
+                new XAttribute("price", p.UnitPrice),
+            new XElement("name", p.ProductName)));
+
+        WriteLine(xml.ToString());
     }
 }
